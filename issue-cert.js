@@ -1,36 +1,32 @@
-name: Issue Certificate (Open Attestation)
+const fs = require('fs');
+const OpenAttestation = require('@govtechsg/open-attestation');
 
-on:
-  workflow_dispatch:
-    inputs:
-      recipient-name:
-        description: 'Recipient name'
-        required: true
-        default: 'John Doe'
+const recipientName = process.env.RECIPIENT_NAME;
 
-jobs:
-  issue_certificate:
-    runs-on: ubuntu-latest
+if (!recipientName) {
+  console.error("❌ Error: RECIPIENT_NAME not set");
+  process.exit(1);
+}
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+let template;
+try {
+  template = JSON.parse(fs.readFileSync('certificate-template.json'));
+} catch (err) {
+  console.error("❌ Error reading/parsing certificate-template.json:", err.message);
+  process.exit(1);
+}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+template.recipient.name = recipientName;
 
-      - name: Install Open Attestation
-        run: npm install @govtechsg/open-attestation
+let issuedCertificate;
+try {
+  issuedCertificate = OpenAttestation.issue(template);
+} catch (err) {
+  console.error("❌ Error issuing certificate:", err.message);
+  process.exit(1);
+}
 
-      - name: Issue Certificate
-        run: node issue-cert.js
-        env:
-          RECIPIENT_NAME: ${{ github.event.inputs.recipient-name }}
+const fileName = `issued-certificate-${recipientName.replace(/\s+/g, '-')}.json`;
+fs.writeFileSync(fileName, JSON.stringify(issuedCertificate, null, 2));
+console.log(`✅ Certificate issued for ${recipientName} -> ${fileName}`);
 
-      - name: Upload Issued Certificate
-        uses: actions/upload-artifact@v4
-        with:
-          name: issued-certificate
-          path: issued-certificate-*.json
