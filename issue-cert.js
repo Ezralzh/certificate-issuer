@@ -23,7 +23,8 @@ template.data.recipient.name = recipientName;
 // ✅ Validate before wrapping
 const validation = validateSchema(template);
 if (!validation.valid) {
-  console.error("❌ Schema validation failed:", validation.errors);
+  console.error("❌ Schema validation failed:");
+  console.error(JSON.stringify(validation.errors, null, 2)); // <-- dump details
   process.exit(1);
 }
 
