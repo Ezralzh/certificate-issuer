@@ -8,19 +8,19 @@ if (!recipientName) {
   process.exit(1);
 }
 
-// Load certificate template
+// Load template
 let template;
 try {
   template = JSON.parse(fs.readFileSync('certificate-template.json'));
 } catch (err) {
-  console.error("❌ Error reading/parsing certificate-template.json:", err.message);
+  console.error("❌ Error reading certificate-template.json:", err.message);
   process.exit(1);
 }
 
-// Replace recipient name inside `data`
+// Replace placeholder
 template.data.recipient.name = recipientName;
 
-// Wrap certificate
+// Wrap into verifiable certificate
 let wrappedCertificate;
 try {
   wrappedCertificate = wrapDocuments([template]);
@@ -29,7 +29,7 @@ try {
   process.exit(1);
 }
 
-// Save certificate
+// Save result
 const fileName = `issued-certificate-${recipientName.replace(/\s+/g, '-')}.json`;
 fs.writeFileSync(fileName, JSON.stringify(wrappedCertificate, null, 2));
 console.log(`✅ Certificate issued for ${recipientName} -> ${fileName}`);
