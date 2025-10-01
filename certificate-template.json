@@ -1,0 +1,16 @@
+{
+  "recipient": {
+    "name": "{{recipientName}}"
+  },
+  "certificate": {
+    "name": "GitHub Automation Workshop"
+  },
+  "issuedOn": "2025-10-01",
+  "issuer": {
+    "name": "Ezra Lim",
+    "identityProof": {
+      "type": "DNS-TXT",
+      "location": "yourdomain.com"
+    }
+  }
+}
