@@ -1,16 +1,16 @@
 {
   "version": "https://schema.openattestation.com/2.0/schema.json",
   "data": {
-    "id": "12345",
-    "name": "GitHub Automation Workshop Certificate",
-    "recipient": {
-      "name": "{{recipientName}}"
-    },
     "$template": {
       "name": "SIMPLE_CRED",
       "type": "EMBEDDED_RENDERER",
       "url": "https://demo-renderer.openattestation.com"
     },
+    "recipient": {
+      "name": "{{recipientName}}"
+    },
+    "name": "GitHub Automation Workshop Certificate",
+    "issuedOn": "2025-10-01",
     "issuers": [
       {
         "name": "Ezra Lim Academy",
@@ -22,4 +22,3 @@
     ]
   }
 }
-
