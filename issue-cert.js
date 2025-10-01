@@ -17,8 +17,8 @@ try {
   process.exit(1);
 }
 
-// Replace recipient name
-template.recipient.name = recipientName;
+// Replace recipient name inside `data`
+template.data.recipient.name = recipientName;
 
 // Wrap certificate
 let wrappedCertificate;
@@ -33,5 +33,3 @@ try {
 const fileName = `issued-certificate-${recipientName.replace(/\s+/g, '-')}.json`;
 fs.writeFileSync(fileName, JSON.stringify(wrappedCertificate, null, 2));
 console.log(`✅ Certificate issued for ${recipientName} -> ${fileName}`);
-
-
